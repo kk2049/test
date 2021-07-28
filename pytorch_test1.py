@@ -126,8 +126,7 @@ class vgg19_Net(nn.Module):
              
         fc = x.view(x.size(0), -1)
          
-        # 查看全连接层的参数：in_fc_size  的值
-        # print("vgg19_model_fc:",fc.size(1))
+        
  
         for fc_item in self.fc_list:
             fc = fc_item(fc)
