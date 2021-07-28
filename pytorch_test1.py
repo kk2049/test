@@ -140,7 +140,9 @@ def main(argv=None):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(CUDA)
     if CUDA:
-        net = vgg19_Net(in_img_rgb=3, in_img_size=32, out_class=10,in_fc_size=512).cuda()
+        net = vgg19_Net(in_img_rgb=3, in_img_size=32, out_class=10,in_fc_size=512)
+        net = nn.DataParallel(net)
+        net = net.cuda()
     else:
         net = vgg19_Net(in_img_rgb=3, in_img_size=32, out_class=10,in_fc_size=512)
 
