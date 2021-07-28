@@ -137,7 +137,7 @@ class vgg19_Net(nn.Module):
 
 def main(argv=None):   
     CUDA = torch.cuda.is_available()
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(CUDA)
     if CUDA:
         net = vgg19_Net(in_img_rgb=3, in_img_size=32, out_class=10,in_fc_size=512)
