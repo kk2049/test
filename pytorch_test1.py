@@ -137,14 +137,10 @@ class vgg19_Net(nn.Module):
 
 def main(argv=None):   
     CUDA = torch.cuda.is_available()
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(CUDA)
-    if CUDA:
-        net = vgg19_Net(in_img_rgb=3, in_img_size=32, out_class=10,in_fc_size=512)
-        net = nn.DataParallel(net, device_ids = [0, 1])
-        net = net.to(device)
-    else:
-        net = vgg19_Net(in_img_rgb=3, in_img_size=32, out_class=10,in_fc_size=512)
+    #device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    net = vgg19_Net(in_img_rgb=3, in_img_size=32, out_class=10,in_fc_size=512)
+    net = nn.DataParallel(net, device_ids = [0, 1])
+    #net = net.to(device)
 
 
 
@@ -158,12 +154,14 @@ def main(argv=None):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
+    print('START Training')
     for epoch in range(10):  # loop over the dataset multiple times
         running_loss = 0.0
         for i, data in enumerate(trainloader, 0):
             # get the inputs; data is a list of [inputs, labels]
-            inputs, labels = data[0].to(device), data[1].to(device)
-
+            #inputs, labels = data[0].to(device), data[1].to(device)
+            inputs, labels = data[0], data[1]
+            
             # zero the parameter gradients
             optimizer.zero_grad()
 
@@ -179,8 +177,6 @@ def main(argv=None):
                 print('[%d, %5d] loss: %.3f' %
                     (epoch + 1, i + 1, running_loss / 2000))
                 running_loss = 0.0
-        PATH = './vgg19_net'+str(epoch)+'.pth'
-        torch.save(net.state_dict(), PATH)
     print('Finished Training')
     
 
